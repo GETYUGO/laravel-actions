@@ -31,6 +31,10 @@ trait DecorateActions
 
     protected function hasMethod(string $method): bool
     {
+        if (! $this->action) {
+            return false;
+        }
+        
         return method_exists($this->action, $method);
     }
 
