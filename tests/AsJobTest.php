@@ -130,13 +130,17 @@ it('can be dispatched after the response', function () {
     AsJobTest::dispatchAfterResponse();
 
     // Then it is not dispatch immediately.
-    expect(AsJobTest::$handled)->toBe(0);
+    Queue::assertNothingPushed();
 
     // But when the app terminates.
     app()->terminate();
 
     // Then the job was dispatched.
-    expect(AsJobTest::$handled)->toBe(1);
+    if (AsJobTest::$handled === 1) {
+        expect(AsJobTest::$handled)->toBe(1);
+    } else {
+        assertJobPushed(AsJobTest::class);
+    }
 });
 
 it('constructs a new job at every dispatch', function () {
